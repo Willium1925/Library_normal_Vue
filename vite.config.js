@@ -8,7 +8,8 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'http://localhost:8083', // 您的後端伺服器地址
+        //target: 'http://localhost:8083', // 您的後端伺服器地址
+        target: 'https://library0825-eubedfhpd3epa7bp.japaneast-01.azurewebsites.net/', // 您的後端伺服器地址
         changeOrigin: true,
         secure: false,
         // 可選：如果後端沒有 /api 前綴，可以重寫路徑
