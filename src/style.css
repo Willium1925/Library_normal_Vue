@@ -1,0 +1,114 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import "tailwindcss";
+
+body {
+  font-family: 'Inter', sans-serif;
+}
+
+/* 自定義RWD樣式 */
+@media (max-width: 1023px) {
+  .sidebar {
+    width: 100% !important;
+    min-width: 100% !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  .sidebar {
+    width: 300px !important;
+    min-width: 300px !important;
+  }
+}
+
+/* 隱藏滾動條但保持滾動功能 */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+/* Easter Egg 樣式 */
+.easter-egg-gradient {
+  background: linear-gradient(90deg, #facc15 0%, #facc15 100%);
+  background-size: 0% 100%;
+  background-repeat: no-repeat;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  transition: background-size 1.5s linear;
+  display: inline-block;
+}
+.easter-egg-gradient.easter-egg-animate {
+  background-size: 100% 100%;
+}
+
+/* 模態框樣式 */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: white;
+  padding: 2rem;
+  border-radius: 0.5rem;
+  width: 90%;
+  max-width: 400px;
+  position: relative;
+}
+
+.close-button {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #6b7280;
+}
+
+.close-button:hover {
+  color: #374151;
+}
+
+/* 狀態點樣式 */
+.status-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: 8px;
+}
+
+.status-available {
+  background-color: #10b981; /* 綠色 - 可借閱 */
+}
+
+.status-borrowed {
+  background-color: #ef4444; /* 紅色 - 已借出 */
+}
+
+/* 行限制樣式 */
+.line-clamp-1 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+}
+
+.line-clamp-2 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
