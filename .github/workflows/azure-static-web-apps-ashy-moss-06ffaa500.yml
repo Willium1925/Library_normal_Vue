@@ -15,43 +15,57 @@ jobs:
     runs-on: ubuntu-latest
     name: Build and Deploy Job
     permissions:
-       id-token: write
-       contents: read
+      id-token: write
+      contents: read
     steps:
-      - uses: actions/checkout@v3
+      # 第一步：檢出程式碼
+      - uses: actions/checkout@v4  # 使用較新版本
         with:
           submodules: true
           lfs: false
 
-      # 🔑 新增這段：強制使用 Node.js 22
+      # 第二步：設定 Node.js - 關鍵修正！
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '22'
+          node-version: '22.12.0'  # 明確指定版本，符合 Vite 7.x 要求
           cache: 'npm'
 
+      # 第三步：安裝相依套件 - 新增這個步驟
+      - name: Install dependencies
+        run: npm ci  # 使用 npm ci 確保乾淨安裝
+
+      # 第四步：建置專案 - 新增這個步驟
+      - name: Build project
+        run: npm run build
+
+      # 第五步：安裝 OIDC 相關套件
       - name: Install OIDC Client from Core Package
         run: npm install @actions/core@1.6.0 @actions/http-client
+
+      # 第六步：取得 ID Token
       - name: Get Id Token
-        uses: actions/github-script@v6
+        uses: actions/github-script@v7  # 使用較新版本
         id: idtoken
         with:
-           script: |
-               const coredemo = require('@actions/core')
-               return await coredemo.getIDToken()
-           result-encoding: string
+          script: |
+            const coredemo = require('@actions/core')
+            return await coredemo.getIDToken()
+          result-encoding: string
+
+      # 第七步：部署到 Azure Static Web Apps
       - name: Build And Deploy
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
         with:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_ASHY_MOSS_06FFAA500 }}
           action: "upload"
-          ###### Repository/Build Configurations - These values can be configured to match your app requirements. ######
-          # For more information regarding Static Web App workflow configurations, please visit: https://aka.ms/swaworkflowconfig
-          app_location: "/" # App source code path
-          api_location: "" # Api source code path - optional
-          output_location: "dist" # Built app content directory - optional
+          ###### Repository/Build Configurations ######
+          app_location: "/" # 應用程式原始碼路徑
+          api_location: "" # API 原始碼路徑（可選）
+          output_location: "dist" # 建置後的應用程式內容目錄
           github_id_token: ${{ steps.idtoken.outputs.result }}
+          skip_app_build: true  # 跳過 Azure 的建置，使用我們自己建置的結果
           ###### End of Repository/Build Configurations ######
 
   close_pull_request_job:
@@ -63,4 +77,5 @@ jobs:
         id: closepullrequest
         uses: Azure/static-web-apps-deploy@v1
         with:
+          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_ASHY_MOSS_06FFAA500 }}
           action: "close"
