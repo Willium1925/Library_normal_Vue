@@ -5,6 +5,10 @@ import tailwindcss from '@tailwindcss/vite'
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [vue(), tailwindcss()],
+
+  // 基礎路徑設定 - 重要！
+  base: './', // 使用相對路徑，適用於 Azure Static Web Apps
+
   server: {
     proxy: {
       '/api': {
